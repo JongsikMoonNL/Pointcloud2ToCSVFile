@@ -46,7 +46,7 @@ int main (int argc, char** argv){
   home_env = getenv("HOME");
 
   std::string fileName;
-  fileName = home_env + "/.ros/nl_log/velLog" + fnDate + ".csv";
+  fileName = home_env + "/.ros/velLog" + fnDate + ".csv";
 
   FILE* logFp_;
   logFp_ = fopen(fileName.c_str(), "wb");
