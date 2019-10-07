@@ -12,19 +12,9 @@ pcl::PointCloud<velodyne_pointcloud::PointXYZIR>::Ptr temp_cloud;
 
 
 void cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){
-  /*sensor_msgs::PointCloud2 output;
-  output = *input;
-  pub.publish (output);*/
-
     pcl::PCLPointCloud2 pcl_pc2;
     pcl_conversions::toPCL(*input,pcl_pc2);
     pcl::fromPCLPointCloud2(pcl_pc2,*temp_cloud);
-
-    for(int i=0; i<temp_cloud->points.size(); i++){
-
-        //std::cout << temp_cloud->points[i].x << std::endl;
-
-    }
 }
 
 int main (int argc, char** argv){
@@ -61,12 +51,6 @@ int main (int argc, char** argv){
                 fprintf(logFp_, "%f, %f, %f, %f, %u, ", temp_cloud->points[i].x, temp_cloud->points[i].y, temp_cloud->points[i].z, temp_cloud->points[i].intensity, temp_cloud->points[i].ring);
             }
         fprintf(logFp_, "\n");
-        std::cout << temp_cloud->points[0].x << std::endl;
-            std::cout << temp_cloud->points[0].y << std::endl;
-            std::cout << temp_cloud->points[0].z << std::endl;
-            std::cout << temp_cloud->points[0].intensity << std::endl;
-            std::cout << temp_cloud->points[0].ring << std::endl;
-
         }
         ros::spinOnce();
         rate.sleep();
