@@ -7,14 +7,13 @@
 #include <iostream>
 #include <velodyne_pointcloud/point_types.h>
 
-
-pcl::PointCloud<velodyne_pointcloud::PointXYZIR>::Ptr temp_cloud;
-
+pcl::PointCloud<pcl::PointXYZ>::Ptr temp_cloud;
 
 void cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){
     pcl::PCLPointCloud2 pcl_pc2;
     pcl_conversions::toPCL(*input,pcl_pc2);
     pcl::fromPCLPointCloud2(pcl_pc2,*temp_cloud);
+        
 }
 
 int main (int argc, char** argv){
