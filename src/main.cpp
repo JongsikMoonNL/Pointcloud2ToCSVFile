@@ -7,7 +7,7 @@
 #include <iostream>
 #include <velodyne_pointcloud/point_types.h>
 
-pcl::PointCloud<pcl::PointXYZ>::Ptr temp_cloud;
+pcl::PointCloud<pcl::PointXYZI>::Ptr temp_cloud;
 
 void cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){
     pcl::PCLPointCloud2 pcl_pc2;
@@ -24,30 +24,30 @@ int main (int argc, char** argv){
   ros::Subscriber sub = nh.subscribe ("velodyne_points", 1, cloud_cb);
 
 
-  time_t timer = time(NULL);
-  struct tm* ltime = localtime(&timer);
-  char fn_date[13];
-  sprintf(fn_date, "%02d%02d%02d_%02d%02d%02d", (ltime->tm_year) - 100, (ltime->tm_mon) + 1, ltime->tm_mday,
-            ltime->tm_hour, ltime->tm_min, ltime->tm_sec);
-  std::string fnDate(fn_date);
+  //time_t timer = time(NULL);
+  //struct tm* ltime = localtime(&timer);
+  //char fn_date[13];
+  //sprintf(fn_date, "%02d%02d%02d_%02d%02d%02d", (ltime->tm_year) - 100, (ltime->tm_mon) + 1, ltime->tm_mday,
+  //          ltime->tm_hour, ltime->tm_min, ltime->tm_sec);
+  //std::string fnDate(fn_date);
 
   std::string home_env;
   home_env = getenv("HOME");
 
   std::string fileName;
-  fileName = home_env + "/.ros/velLog" + fnDate + ".csv";
-
+  fileName = home_env + "/rosLog/velLog.csv";
+ 
   FILE* logFp_;
   logFp_ = fopen(fileName.c_str(), "wb");
 
-    ros::Rate rate(20.0f);
+  ros::Rate rate(20.0f);
 
     while (ros::ok()) {
         if (temp_cloud->points.size() != 0) {
             ros::Time t = ros::Time::now();
             fprintf(logFp_, "%ld.%ld, ", t.sec, t.nsec);
             for (int i = 0; i < temp_cloud->points.size(); i++) {
-                fprintf(logFp_, "%f, %f, %f, %f, %u, ", temp_cloud->points[i].x, temp_cloud->points[i].y, temp_cloud->points[i].z, temp_cloud->points[i].intensity, temp_cloud->points[i].ring);
+                fprintf(logFp_, "%f, %f, %f, %f ", temp_cloud->points[i].x, temp_cloud->points[i].y, temp_cloud->points[i].z, temp_cloud->points[i].intensity);
             }
         fprintf(logFp_, "\n");
         }
